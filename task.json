@@ -1,0 +1,63 @@
+{
+    "id": "5ab1637a-15df-49ed-98f5-122590182ab0",
+    "name": "azure-pipelines-replace-tokens",
+    "friendlyName": "Replace Tokens",
+    "description": "Replace tokens in files in Azure Pipelines",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Yiwen Wang",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Replacing tokens",
+    "inputs": [{
+        "name": "tokenPattern",
+        "type": "string",
+        "label": "Token pattern",
+        "defaultValue": "\\$([^$]+)\\$",
+        "required": true,
+        "helpMarkDown": "Pattern of the tokens to replace, default is \\$([^$]+)\\$. Note: If first regex group exists, it will be used to get value, otherwise the whole match will be used."
+    }, {
+        "name": "inputFile",
+        "type": "string",
+        "label": "Input file",
+        "defaultValue": "",
+        "required": false,
+        "helpMarkDown": "Path (or uri) to token-value file."
+    }, {
+        "name": "processFiles",
+        "type": "string",
+        "label": "Process files",
+        "defaultValue": "",
+        "required": true,
+        "helpMarkDown": "Files need to be processed. Wildcard is supported."
+    }, {
+        "name": "fileDelimiter",
+        "type": "string",
+        "label": "File delimiter",
+        "defaultValue": ",",
+        "required": false,
+        "helpMarkDown": "Delimiter used to split file, default is ','."
+    }, {
+        "name": "skipHeader",
+        "type": "boolean",
+        "label": "Skip header",
+        "defaultValue": false,
+        "required": false,
+        "helpMarkDown": "Skip input file's header, default is false."
+    }, {
+        "name": "ignoreMissingValue",
+        "type": "boolean",
+        "label": "Ignore missing value",
+        "defaultValue": false,
+        "required": false,
+        "helpMarkDown": "Ignore missing token value, default is false."
+    }],
+    "execution": {
+        "Node": {
+            "target": "out/index.js"
+        }
+    }
+}
