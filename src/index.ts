@@ -1,9 +1,9 @@
 import tl from "azure-pipelines-task-lib";
-import http from "http";
 import fs from "fs";
+import glob from "glob";
+import http from "http";
 import path from "path";
 import { env } from "process";
-import glob from "glob";
 
 // ======================================================================
 // Parameters:
@@ -24,29 +24,29 @@ import glob from "glob";
 
 async function run() {
     // 1. Get input parameters
-    let tokenPattern = tl.getInput("tokenPattern", true);
+    const tokenPattern = tl.getInput("tokenPattern", true);
     console.debug(`tokenPattern: ${tokenPattern}`);
 
-    let inputFile = tl.getInput("inputFile") || "";
+    const inputFile = tl.getInput("inputFile") || "";
     console.debug(`inputFile: ${inputFile}`);
 
-    let processFiles = tl.getInput("processFiles", true);
+    const processFiles = tl.getInput("processFiles", true);
     console.debug(`processFiles: ${processFiles}`);
 
-    let fileDelimiter = tl.getInput("fileDelimiter") || ",";
+    const fileDelimiter = tl.getInput("fileDelimiter") || ",";
     console.debug(`fileDelimiter: ${fileDelimiter}`);
 
-    let skipHeader = tl.getBoolInput("skipHeader") || false;
+    const skipHeader = tl.getBoolInput("skipHeader") || false;
     console.debug(`skipHeader: ${skipHeader}`);
 
-    let ignoreMissingValue = tl.getBoolInput("ignoreMissingValue") || false;
+    const ignoreMissingValue = tl.getBoolInput("ignoreMissingValue") || false;
     console.debug(`ignoreMissingValue: ${ignoreMissingValue}`);
 
     // 2. Fetch input file if exist
-    var inputFileContent = await fetchFile(inputFile);
+    const inputFileContent = await fetchFile(inputFile);
 
     // 3. Parse tokens
-    var tokenValues = parseTokens(inputFileContent, fileDelimiter, skipHeader);
+    const tokenValues = parseTokens(inputFileContent, fileDelimiter, skipHeader);
 
     // 4. Process files
     await processAsync(tokenPattern, processFiles, tokenValues, ignoreMissingValue);
@@ -61,27 +61,25 @@ async function fetchFile(tokenFile: string): Promise<string> {
         try {
             // Then try read the file content and return
             return await new Promise((resolve) => {
-                resolve(fs.readFileSync(tokenFile).toString())
+                resolve(fs.readFileSync(tokenFile).toString());
             });
-        }
-        catch{ }
+        } catch { }
     }
 
     // If not, treat it as an "http(s)://" uri and try to get it
     console.info(`Trying to download file from ${tokenFile}`);
     return await new Promise<string>((resolve) => {
         try {
-            let fileName = path.basename(tokenFile);
-            let file = fs.createWriteStream(fileName);
-            http.get(tokenFile, res => {
+            const fileName = path.basename(tokenFile);
+            const file = fs.createWriteStream(fileName);
+            http.get(tokenFile, (res) => {
                 res.pipe(file);
                 file.on("finish", () => {
                     file.close();
                     resolve(fs.readFileSync(fileName).toString());
-                })
+                });
             });
-        }
-        catch {
+        } catch {
             resolve("");
         }
     });
@@ -92,14 +90,14 @@ function parseTokens(inputFileContent: string, fileDelimiter: string = ",", skip
     let lines = inputFileContent.replace("\r\n", "\n").replace("\r", "\n").split("\n");
     console.debug(`Got ${lines.length} lines.`);
     if (skipHeader && lines.length >= 1) {
-        console.debug("Skipped first line due to skipHeader is true.")
+        console.debug("Skipped first line due to skipHeader is true.");
         lines = lines.slice(1);
     }
     console.debug(`Using ${fileDelimiter} as delimiter.`);
-    let map = new Map<string, string>();
-    lines.forEach(line => {
+    const map = new Map<string, string>();
+    lines.forEach((line) => {
         if (line !== "") {
-            var sections = line.split(fileDelimiter);
+            const sections = line.split(fileDelimiter);
             if (sections.length >= 2) {
                 map.set(sections[0], sections[1]);
             }
@@ -109,23 +107,23 @@ function parseTokens(inputFileContent: string, fileDelimiter: string = ",", skip
 }
 
 async function processAsync(tokenPattern: string, processFiles: string, tokenValues: Map<string, string>, ignoreMissingValue: boolean = false) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
         // Find files to process
         glob(processFiles, (err, matches) => {
             if (err) {
                 throw err;
             }
-            let tokenRegex = new RegExp(tokenPattern);
+            const tokenRegex = new RegExp(tokenPattern);
             // Process each file
-            matches.forEach(match => {
+            matches.forEach((match) => {
                 console.debug(`File ${match} matches processFiles`);
                 // Read file content
                 let content = fs.readFileSync(match).toString();
                 let tokenMatch = tokenRegex.exec(content);
                 while (tokenMatch) {
                     console.info(`Found token ${tokenMatch[0]}`);
-                    let token = tokenMatch[1] || tokenMatch[0] || "";
-                    let value = getTokenValue(token, tokenValues, ignoreMissingValue) || "";
+                    const token = tokenMatch[1] || tokenMatch[0] || "";
+                    const value = getTokenValue(token, tokenValues, ignoreMissingValue) || "";
                     content = content.replace(tokenMatch[0], value);
 
                     tokenMatch = tokenRegex.exec(content);
