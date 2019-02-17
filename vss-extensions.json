@@ -1,0 +1,29 @@
+{
+  "manifestVersion": 1,
+  "id": "azure-pipelines-replace-tokens",
+  "version": "0.1.0",
+  "name": "Replace Tokens",
+  "publisher": "Vicey",
+  "description": "Replace tokens in your artifacts.",
+  "targets": [{
+    "id": "Microsoft.VisualStudio.Services"
+  }],
+  "categories": [
+    "Azure Pipelines"
+  ],
+  "content": {
+    "details": {
+      "path": "README.md"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "uri": "https://github.com/yhvicey/azure-pipelines-replace-tokens"
+  },
+  "files": [{
+    "path": "launch.html",
+    "addressable": true
+  }, {
+    "path": "Tasks/ReplaceTokensV1"
+  }]
+}
