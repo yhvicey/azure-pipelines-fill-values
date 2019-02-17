@@ -3,11 +3,8 @@
   "id": "azure-pipelines-replace-tokens",
   "version": "0.1.0",
   "name": "Replace Tokens",
-  "publisher": "Vicey",
-  "description": "Replace tokens in your artifacts.",
-  "targets": [{
-    "id": "Microsoft.VisualStudio.Services"
-  }],
+  "publisher": "vicey",
+  "description": "Replace tokens in files.",
   "categories": [
     "Azure Pipelines"
   ],
@@ -16,14 +13,22 @@
       "path": "README.md"
     }
   },
+  "contributions": [{
+    "id": "replaceTokens",
+    "type": "ms.vss-distributed-task.task",
+    "description": "A task for replacing tokens in files.",
+    "targets": [
+      "ms.vss-distributed-task.tasks"
+    ]
+  }],
+  "files": [{
+    "path": "Tasks/ReplaceTokensV1"
+  }],
   "repository": {
     "type": "git",
     "uri": "https://github.com/yhvicey/azure-pipelines-replace-tokens"
   },
-  "files": [{
-    "path": "launch.html",
-    "addressable": true
-  }, {
-    "path": "Tasks/ReplaceTokensV1"
+  "targets": [{
+    "id": "Microsoft.VisualStudio.Services"
   }]
 }

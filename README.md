@@ -1,5 +1,5 @@
 # Replace Tokens
 
-An Azure Pipelines task for replacing tokens in your artifacts.
+An Azure Pipelines task for replacing tokens in files.
 
 (TODO)
