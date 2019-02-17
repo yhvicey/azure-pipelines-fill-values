@@ -3,7 +3,7 @@
  *
  * @interface IValueSource
  */
-interface IValueSource {
+export interface IValueSource {
     /**
      * Gets value table from source.
      *

@@ -1,11 +1,7 @@
 import fs from "fs";
 import readline from "readline";
-
-export interface ILocalFileSourceOptions {
-    filename: string;
-    delimiter?: string;
-    timeout?: number;
-}
+import { ILocalFileSourceOptions } from "../Options";
+import { IValueSource } from "./IValueSource";
 
 /**
  * Load values from local file (Files in artifacts)
@@ -17,12 +13,14 @@ export interface ILocalFileSourceOptions {
 export default class LocalFileSource implements IValueSource {
     private delimiter: string;
     private filename: string;
+    private skipHeader: boolean;
     private timeout: number;
 
     constructor(options: ILocalFileSourceOptions) {
-        this.filename = options.filename;
-        this.delimiter = options.delimiter || ",";
-        this.timeout = options.timeout || 10;
+        this.filename = options.fileName;
+        this.delimiter = options.delimiter;
+        this.skipHeader = options.skipHeader;
+        this.timeout = options.timeout;
     }
 
     public async getValuesAsync(): Promise<Map<string, string>> {
@@ -41,6 +39,13 @@ export default class LocalFileSource implements IValueSource {
 
             await new Promise((resolve) => {
                 reader.on("line", (line) => {
+
+                    if (this.skipHeader) {
+                        // Skip first line if skipHeader is true
+                        this.skipHeader = false;
+                        return;
+                    }
+
                     const kvp = this.parseLine(line);
                     if (kvp) {
                         values.set(kvp[0], kvp[1]);

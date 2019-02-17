@@ -1,15 +1,10 @@
-import Helper from "../Utils/Helper";
+import Input from "../Input";
+import { ValueSourceType } from "../Options";
+import { IValueSource } from "./IValueSource";
 import LocalFileSource from "./LocalFileSource";
 
-export enum ValueSourceType {
-    LocalFile,
-    RemoteFile,
-    ADOVarGroup,
-    AzureKeyVault,
-}
-
 export default class ValueSourceFactory {
-    public createValueSource(type: ValueSourceType): IValueSource {
+    public static createValueSource(type: ValueSourceType): IValueSource {
         switch (type) {
             case ValueSourceType.ADOVarGroup: {
                 throw new Error("Not implemented yet");
@@ -18,15 +13,9 @@ export default class ValueSourceFactory {
                 throw new Error("Not implemented yet");
             }
             case ValueSourceType.LocalFile: {
-                const filename = Helper.getInput("filename");
-                const delimiter = Helper.getInput("delimiter");
-                const timeout = Helper.getInput<number>("timeout");
+                const options = Input.getLocalFileSourceOptions();
 
-                if (!filename || filename === "") {
-                    throw new Error(`Invalid local filename: ${filename}`);
-                }
-
-                return new LocalFileSource({ filename, delimiter, timeout });
+                return new LocalFileSource(options);
             }
             case ValueSourceType.RemoteFile: {
                 throw new Error("Not implemented yet");

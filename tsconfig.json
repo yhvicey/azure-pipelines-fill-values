@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["es2015"],
+    "lib": ["es2015", "dom"],
     "sourceMap": true,
     "strict": true,
     "noImplicitAny": true,
@@ -12,7 +12,7 @@
     "sourceRoot": "src",
     "outDir": "out",
     "types": [
-      "mocha"
+      "node"
     ],
     "plugins": [{
       "name": "typescript-tslint-plugin"
