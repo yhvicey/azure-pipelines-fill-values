@@ -1,22 +1,14 @@
-import path from "path";
 import assert from "assert";
 import ttm from "azure-pipelines-task-lib/mock-test";
+import path from "path";
 
-describe("Sample task tests", function () {
-
-    before(function () {
-
-    });
-
-    after(() => {
-
-    });
+describe("Sample task tests", () => {
 
     it("should succeed with simple inputs", function (done: MochaDone) {
         this.timeout(1000);
 
-        let tp = path.join(__dirname, "..", "out", "tests", "index.success.test.js");
-        let tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+        const tp = path.join(__dirname, "..", "out", "tests", "index.success.test.js");
+        const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
         tr.run();
         console.log(tr.succeeded);
@@ -30,8 +22,8 @@ describe("Sample task tests", function () {
     it("it should fail if tool returns 1", function (done: MochaDone) {
         this.timeout(1000);
 
-        let tp = path.join(__dirname, "..", "out", "tests", "index.failure.test.js");
-        let tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+        const tp = path.join(__dirname, "..", "out", "tests", "index.failure.test.js");
+        const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
         tr.run();
         console.log(tr.succeeded);

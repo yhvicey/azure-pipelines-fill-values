@@ -1,27 +1,39 @@
 import tl from "azure-pipelines-task-lib";
-import { ILocalFileSourceOptions, ITaskOptions, ValueSourceType } from "./Options";
+import {
+    IFileSourceOptions,
+    ILocalFileSourceOptions,
+    IRemoteFileSourceOptions,
+    ITaskOptions,
+    ValueSourceType,
+} from "./Options";
 
 export default class Input {
     public static getLocalFileSourceOptions(): ILocalFileSourceOptions {
-        const valueFilename = tl.getInput("valueFilename");
-        const delimiter = tl.getInput("delimiter") || ",";
-        const timeout = tl.getInput("timeout") || 10;
-        const skipHeader = tl.getBoolInput("skipHeader") || false;
+        const fileOptions = this.getFileOptions();
+        const fileName = tl.getInput("fileName");
 
-        if (!valueFilename || valueFilename === "") {
-            throw new Error(`Invalid local filename: ${valueFilename}`);
-        }
-
-        const timeoutValue = Number(timeout);
-        if (isNaN(timeoutValue)) {
-            throw new Error("Invalid timeout value!");
+        if (!fileName || fileName === "") {
+            throw new Error(`Invalid local filename: ${fileName}`);
         }
 
         return {
-            delimiter,
-            fileName: valueFilename,
-            skipHeader,
-            timeout: timeoutValue,
+            ...fileOptions,
+            fileName,
+        };
+    }
+
+    public static getRemoteFileSourceOptions(): IRemoteFileSourceOptions {
+        const fileOptions = this.getFileOptions();
+        const fileUrl = tl.getInput("fileUrl");
+
+        if (!fileUrl || fileUrl === "") {
+            throw new Error(`Invalid remote file url: ${fileUrl}`);
+        }
+        const fileUrlValue = new URL(fileUrl);
+
+        return {
+            ...fileOptions,
+            fileUrl: fileUrlValue,
         };
     }
 
@@ -45,6 +57,23 @@ export default class Input {
             patternGroup,
             processFiles,
             valueSource: valueSourceValue,
+        };
+    }
+
+    private static getFileOptions(): IFileSourceOptions {
+        const delimiter = tl.getInput("delimiter") || ",";
+        const timeout = tl.getInput("timeout") || 10;
+        const skipHeader = tl.getBoolInput("skipHeader") || false;
+
+        const timeoutValue = Number(timeout);
+        if (isNaN(timeoutValue)) {
+            throw new Error("Invalid timeout value!");
+        }
+
+        return {
+            delimiter,
+            skipHeader,
+            timeout: timeoutValue,
         };
     }
 }

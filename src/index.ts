@@ -3,7 +3,7 @@ import glob from "glob";
 import readline from "readline";
 import Input from "./Input";
 import Processor from "./Processor";
-import ValueSourceFactory from "./ValueSources/ValueSourceFactory";
+import ValueSourceFactory from "./ValueSourceFactory";
 
 async function run() {
     const taskOptions = Input.getTaskOptions();
@@ -28,8 +28,9 @@ async function run() {
 
 async function processFile(filename: string, processor: Processor) {
     try {
+        const tempFileName = `${filename}.temp`
         const inputStream = fs.createReadStream(filename);
-        const outputStream = fs.createWriteStream(`${filename}.new`);
+        const outputStream = fs.createWriteStream(tempFileName);
 
         const reader = readline.createInterface({
             input: inputStream,
@@ -39,10 +40,15 @@ async function processFile(filename: string, processor: Processor) {
             reader.on("line", (line) => {
                 outputStream.write(`${processor.processLine(line)}\n`);
             }).on("close", () => {
+                inputStream.close();
                 outputStream.close();
                 resolve();
             });
         });
+
+        // Replace generated file
+        fs.renameSync(tempFileName, filename);
+        fs.unlinkSync(tempFileName);
     } catch {
         console.error(`Failed to process file. File path: ${filename}`);
     }

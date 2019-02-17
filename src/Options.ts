@@ -90,3 +90,13 @@ export interface ILocalFileSourceOptions extends IFileSourceOptions {
      */
     fileName: string;
 }
+
+export interface IRemoteFileSourceOptions extends IFileSourceOptions {
+    /**
+     * Value file url.
+     *
+     * @type {URL}
+     * @memberof IRemoteFileSourceOptions
+     */
+    fileUrl: URL;
+}

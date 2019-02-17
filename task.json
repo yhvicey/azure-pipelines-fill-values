@@ -55,7 +55,8 @@
         "type": "pickList",
         "required": "true",
         "options": {
-            "LocalFile": "Local File"
+            "LocalFile": "Local File",
+            "RemoteFile": "Remote File"
         },
         "defaultValue": "LocalFile",
         "groupName": "valueSource",
@@ -64,13 +65,45 @@
             "EditableOptions": "False"
         }
     }, {
-        "name": "valueFilename",
-        "label": "Value File Name",
+        "name": "timeout",
+        "label": "Timeout",
         "type": "string",
+        "defaultValue": "10",
+        "groupName": "valueSource",
+        "helpMarkDown": "Value loading timeout."
+    }, {
+        "name": "delimiter",
+        "label": "Value File Delimiter",
+        "type": "string",
+        "defaultValue": ",",
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == LocalFile || valueSource == RemoteFile",
+        "helpMarkDown": "Delimiter used to split rows in value file."
+    }, {
+        "name": "skipHeader",
+        "label": "Skip Value File Header",
+        "type": "boolean",
+        "defaultValue": "false",
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == LocalFile || valueSource == RemoteFile",
+        "helpMarkDown": "Skip first row in value file."
+    }, {
+        "name": "fileName",
+        "label": "Value File Name",
+        "type": "filePath",
+        "required": "true",
         "defaultValue": "values.csv",
         "groupName": "valueSource",
         "visibleRule": "valueSource == LocalFile",
-        "helpMarkDown": "File to get token values from."
+        "helpMarkDown": "File name to get token values from."
+    }, {
+        "name": "fileUrl",
+        "label": "Value File Url",
+        "type": "string",
+        "required": "true",
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == RemoteFile",
+        "helpMarkDown": "File url to get token values from."
     }],
     "execution": {
         "Node": {

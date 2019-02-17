@@ -1,7 +1,8 @@
-import Input from "../Input";
-import { ValueSourceType } from "../Options";
-import { IValueSource } from "./IValueSource";
-import LocalFileSource from "./LocalFileSource";
+import Input from "./Input";
+import { ValueSourceType } from "./Options";
+import { IValueSource } from "./ValueSources/IValueSource";
+import LocalFileSource from "./ValueSources/LocalFileSource";
+import RemoteFileSource from "./ValueSources/RemoteFileSource";
 
 export default class ValueSourceFactory {
     public static createValueSource(type: ValueSourceType): IValueSource {
@@ -18,7 +19,9 @@ export default class ValueSourceFactory {
                 return new LocalFileSource(options);
             }
             case ValueSourceType.RemoteFile: {
-                throw new Error("Not implemented yet");
+                const options = Input.getRemoteFileSourceOptions();
+
+                return new RemoteFileSource(options);
             }
         }
     }

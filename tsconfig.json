@@ -9,21 +9,21 @@
     "strictNullChecks": true,
     "esModuleInterop": true,
     "rootDir": ".",
-    "sourceRoot": "src",
     "outDir": "out",
     "types": [
-      "node"
+      "node",
+      "mocha"
     ],
     "plugins": [{
       "name": "typescript-tslint-plugin"
     }]
   },
   "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts"
+    "src/**/*.*",
+    "tests/**/*.*"
   ],
   "exclude": [
     "node_modules",
-    "out/**/*.js"
+    "out/**/*.*"
   ]
 }
