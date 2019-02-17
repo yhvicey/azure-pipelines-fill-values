@@ -2,7 +2,7 @@
   "name": "azure-pipelines-replace-tokens",
   "version": "1.0.0",
   "description": "Azure Pipelines task for replacing tokens in files.",
-  "main": "out/index.js",
+  "main": "out/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,10 +20,11 @@
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.18",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^10.12.26",
     "@types/q": "^1.5.1",
     "mocha": "^5.2.0",
-    "typescript": "^3.2.2"
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
   }
 }

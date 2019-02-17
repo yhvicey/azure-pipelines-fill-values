@@ -1,7 +1,5 @@
-import tmrm from "azure-pipelines-task-lib/mock-run";
-import path from "path";
+import Utils from "./Utils";
 
-let taskPath = path.join(__dirname, "..", "out", "index.js");
-let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
+let tmr = Utils.getTaskMockRunner();
 
 tmr.run();

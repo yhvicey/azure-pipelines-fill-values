@@ -4,12 +4,11 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceFolder}/out/index.js",
+        "program": "${workspaceFolder}/out/src/index.js",
         "preLaunchTask": "tsc: build - tsconfig.json",
         "sourceMaps": true,
         "outFiles": [
-            "${workspaceFolder}/out/**/*.js",
-            "${workspaceFolder}/node_modules/**"
+            "${workspaceFolder}/out/**/*.*",
         ],
         "env": {
             "INPUT_TOKENPATTERN": "\\$([^$]+)\\$",

@@ -11,49 +11,99 @@
         "Minor": 1,
         "Patch": 0
     },
+    "visibility": [
+        "Build",
+        "Release"
+    ],
     "instanceNameFormat": "Replacing tokens",
+    "groups": [{
+        "name": "valueSource",
+        "displayName": "Value Source",
+        "isExpanded": true
+    }],
     "inputs": [{
-        "name": "tokenPattern",
-        "type": "string",
-        "label": "Token pattern",
-        "defaultValue": "\\$([^$]+)\\$",
-        "required": true,
-        "helpMarkDown": "Pattern of the tokens to replace, default is \\$([^$]+)\\$. Note: If first regex group exists, it will be used to get value, otherwise the whole match will be used."
-    }, {
-        "name": "inputFile",
-        "type": "string",
-        "label": "Input file",
-        "defaultValue": "",
-        "required": false,
-        "helpMarkDown": "Path (or uri) to token-value file."
-    }, {
         "name": "processFiles",
-        "type": "string",
-        "label": "Process files",
-        "defaultValue": "",
-        "required": true,
-        "helpMarkDown": "Files need to be processed. Wildcard is supported."
+        "label": "Process Files",
+        "type": "multiLine",
+        "required": "true",
+        "helpMarkDown": "Files to process. Use ';' to delimit list. Glob pattern is supported",
+        "properties": {
+            "resizable": "true",
+            "rows": "2"
+        }
     }, {
-        "name": "fileDelimiter",
+        "name": "pattern",
+        "label": "Pattern",
         "type": "string",
-        "label": "File delimiter",
+        "defaultValue": "\\$([^$]+)\\$",
+        "helpMarkDown": "RegExp pattern used to match tokens."
+    }, {
+        "name": "patternGroup",
+        "label": "Pattern Group",
+        "type": "string",
+        "defaultValue": "1",
+        "helpMarkDown": "Pattern group's index used to get token name from RegExp match."
+    }, {
+        "name": "failOnMissingValue",
+        "label": "Failed On Missing Value",
+        "type": "boolean",
+        "defaultValue": "false",
+        "helpMarkDown": "Fail on missing token value."
+    }, {
+        "name": "valueSource",
+        "label": "Value Source",
+        "type": "pickList",
+        "required": "true",
+        "options": {
+            "LocalFile": "Local File",
+            "RemoteFile": "Remote File"
+        },
+        "defaultValue": "LocalFile",
+        "groupName": "valueSource",
+        "helpMarkDown": "Token values' source.",
+        "properties": {
+            "EditableOptions": "False"
+        }
+    }, {
+        "name": "timeout",
+        "label": "Timeout",
+        "type": "string",
+        "defaultValue": "10",
+        "groupName": "valueSource",
+        "helpMarkDown": "Value loading timeout."
+    }, {
+        "name": "delimiter",
+        "label": "Value File Delimiter",
+        "type": "string",
         "defaultValue": ",",
-        "required": false,
-        "helpMarkDown": "Delimiter used to split file, default is ','."
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == LocalFile || valueSource == RemoteFile",
+        "helpMarkDown": "Delimiter used to split rows in value file."
     }, {
         "name": "skipHeader",
+        "label": "Skip Value File Header",
         "type": "boolean",
-        "label": "Skip header",
-        "defaultValue": false,
-        "required": false,
-        "helpMarkDown": "Skip input file's header, default is false."
+        "defaultValue": "false",
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == LocalFile || valueSource == RemoteFile",
+        "helpMarkDown": "Skip first row in value file."
     }, {
-        "name": "ignoreMissingValue",
-        "type": "boolean",
-        "label": "Ignore missing value",
-        "defaultValue": false,
-        "required": false,
-        "helpMarkDown": "Ignore missing token value, default is false."
+        "name": "fileName",
+        "label": "Value File Name",
+        "type": "filePath",
+        "required": "true",
+        "defaultValue": "values.csv",
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == LocalFile",
+        "helpMarkDown": "File name to get token values from."
+    }, {
+        "name": "fileUrl",
+        "label": "Value File Url",
+        "type": "string",
+        "required": "true",
+        "groupName": "valueSource",
+        "visibleRule": "valueSource == RemoteFile",
+        "helpMarkDown": "File url to get token values from."
     }],
     "execution": {
         "Node": {
